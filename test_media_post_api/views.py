@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 class PostList(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    def get(self, request):
+    def get(self):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK )
@@ -23,15 +23,13 @@ class PostList(APIView):
             'shares': request.data.get('shares'),
             'comments': request.data.get('comments'),
             'draft': request.data.get('draft'),
-            "user": {
-                "id": 1
-            }
+            'user': request.user.pk
         }
         serializer = PostSerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):
             post_saved = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(post_saved, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
