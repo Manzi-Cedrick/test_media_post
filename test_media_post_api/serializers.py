@@ -1,13 +1,14 @@
 from rest_framework import serializers
-from .models import Post, Comment, Drafts, User
+from .models import Post, Comment, Drafts
+from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User,
-        fields = ['username','email','password', 'created_at', 'updated_at']
+        fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True)  # Allow the user field to be optional
+    user = UserSerializer(required=False)
     class Meta:
         model = Post
         fields = ['title','description','scheduled_datetime','likes','shares','user','draft']
