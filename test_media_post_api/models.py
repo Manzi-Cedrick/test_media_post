@@ -1,16 +1,15 @@
 from django.db import models
 import uuid  
 from django.conf import settings
+from django.contrib.auth.models import User
 
-class User(models.Model):
-    username = models.CharField(max_length=12)
-    email = models.EmailField(max_length=254)
-    password = models.CharField(max_length=12)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     
     def __str__(self):
-        return self.username
+        return self.created_at
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
@@ -20,7 +19,7 @@ class Post(models.Model):
     likes = models.IntegerField(default=0, blank=True)
     shares = models.IntegerField(default=0, blank=True)
     draft = models.BooleanField(default=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
