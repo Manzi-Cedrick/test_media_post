@@ -14,7 +14,7 @@ class UserProfile(models.Model):
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField()    
     scheduled_datetime = models.DateTimeField(auto_now_add=True, blank=True)
     likes = models.IntegerField(default=0, blank=True)
     shares = models.IntegerField(default=0, blank=True)
